@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 import 'package:sippy_cart_sharing/common_widgets/animated_loader.dart';
 
 class InviteModal extends StatefulWidget {
@@ -72,7 +73,7 @@ class _InviteModalState extends State<InviteModal> {
               controller: _nameController,
               decoration: const InputDecoration(labelText: 'Name'),
             ),
-            const SizedBox(height: 16),
+            const Gap(16),
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(labelText: 'Session Title'),
@@ -125,6 +126,94 @@ class _InviteModalState extends State<InviteModal> {
                   ? _generateLink
                   : () => Navigator.pop(context),
           child: Text(_generatedLink == null ? 'GENERATE LINK' : 'DONE'),
+        ),
+      ],
+    );
+  }
+}
+
+class JoinModal extends StatefulWidget {
+  const JoinModal({super.key});
+
+  @override
+  State<JoinModal> createState() => _JoinModalState();
+}
+
+class _JoinModalState extends State<JoinModal> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _sessionIdController = TextEditingController();
+
+  bool _isJoining = false;
+
+  Future<void> _joinSession() async {
+    final name = _nameController.text.trim();
+    final sessionId = _sessionIdController.text.trim();
+
+    if (name.isEmpty || sessionId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter both name and session ID')),
+      );
+      return;
+    }
+
+    setState(() => _isJoining = true);
+
+    try {
+      // Simulate join logic
+      await Future.delayed(const Duration(seconds: 1));
+      debugPrint('Joined session: $sessionId as $name');
+
+      if (mounted) {
+        Navigator.of(context).pop({'name': name, 'sessionId': sessionId});
+      }
+    } catch (e) {
+      debugPrint('Join error: $e');
+    } finally {
+      if (mounted) setState(() => _isJoining = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _sessionIdController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Join a Shopping Session'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Your Name',
+                hintText: 'Enter your display name',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _sessionIdController,
+              decoration: const InputDecoration(
+                labelText: 'Session ID',
+                hintText: 'Enter session ID you received',
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('CANCEL'),
+        ),
+        ElevatedButton(
+          onPressed: _isJoining ? null : _joinSession,
+          child: Text(_isJoining ? 'Joining...' : 'JOIN'),
         ),
       ],
     );

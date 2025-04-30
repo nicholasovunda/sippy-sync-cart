@@ -120,7 +120,15 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 12),
             Expanded(
               child: ElevatedButton(
-                onPressed: _isLoading ? null : () {},
+                onPressed:
+                    _isLoading
+                        ? null
+                        : () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => const JoinModal(),
+                          );
+                        },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
                 child: const Text("Join as Friend"),
               ),
