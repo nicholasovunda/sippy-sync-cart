@@ -1,21 +1,19 @@
 import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-import 'package:sippy_cart_sharing/feature/cart/domain/cart_item_details.dart';
 import 'package:sippy_cart_sharing/feature/cart/domain/item.dart';
 
 // Model class for Cart
 class Cart extends Equatable {
-  final Map<String, CartItemDetails> items;
+  final Map<String, Item> items;
 
   const Cart([this.items = const {}]);
 
   // Convert from Map for deserialization
   factory Cart.fromMap(Map<String, dynamic> map) {
     return Cart(
-      Map<String, CartItemDetails>.fromEntries(
+      Map<String, Item>.fromEntries(
         (map['items'] as Map<String, dynamic>).entries.map(
-          (entry) => MapEntry(entry.key, CartItemDetails.fromMap(entry.value)),
+          (entry) => MapEntry(entry.key, Item.fromMap(entry.value)),
         ),
       ),
     );
@@ -39,11 +37,9 @@ class Cart extends Equatable {
   bool? get stringify => true;
 }
 
-// Getting all items on cart as a List of Items
+// Getting all items in cart as a List of Items
 extension CartItems on Cart {
   List<Item> toItemList() {
-    return items.entries.map((entry) {
-      return Item(productId: entry.key, quantity: entry.value.quantity);
-    }).toList();
+    return items.values.toList();
   }
 }

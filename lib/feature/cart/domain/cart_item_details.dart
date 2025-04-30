@@ -1,21 +1,22 @@
-import 'package:equatable/equatable.dart';
-import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
+// import 'package:equatable/equatable.dart';
+// import 'package:sippy_cart_sharing/feature/cart/domain/item.dart';
+// import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
 
-class CartItemDetails extends Equatable {
-  final int quantity;
-  final GuestId addedBy;
+// class CartItemDetails extends Equatable {
+//   final Item item;
+//   final GuestId addedBy;
 
-  const CartItemDetails({required this.quantity, required this.addedBy});
+//   const CartItemDetails({required this.item, required this.addedBy});
 
-  factory CartItemDetails.fromMap(Map<String, dynamic> map) {
-    return CartItemDetails(
-      quantity: map['quantity'] ?? 0,
-      addedBy: map['addedBy'] ?? '',
-    );
-  }
+//   factory CartItemDetails.fromMap(Map<String, dynamic> map) {
+//     return CartItemDetails(
+//       item: Item.fromMap(map['item']),
+//       addedBy: map['addedBy'],
+//     );
+//   }
 
-  Map<String, dynamic> toMap() => {'quantity': quantity, 'addedBy': addedBy};
+//   Map<String, dynamic> toMap() => {'item': item.toMap(), 'addedBy': addedBy};
 
-  @override
-  List<Object?> get props => [quantity, addedBy];
-}
+//   @override
+//   List<Object?> get props => [item, addedBy];
+// }

@@ -1,11 +1,11 @@
+import 'package:sippy_cart_sharing/feature/cart/domain/cart.dart';
 import 'package:sippy_cart_sharing/feature/cart/domain/item.dart';
 import 'package:sippy_cart_sharing/feature/cart/domain/mutable_cart.dart';
-
 import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
 
 extension MutableSession on Session {
-  Session updateCart(Item item, GuestId addedBy) {
-    final updatedCart = cart.setItem(item, addedBy);
+  Session updateCart(Item item) {
+    final updatedCart = cart.setItem(item);
     return Session(
       sessionId: sessionId,
       creatorId: creatorId,
@@ -55,7 +55,7 @@ extension MutableSession on Session {
       sessionId: sessionId,
       creatorId: creatorId,
       guestNames: {},
-      cart: cart,
+      cart: const Cart(),
     );
   }
 }

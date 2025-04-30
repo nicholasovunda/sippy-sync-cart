@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:sippy_cart_sharing/auto_router.gr.dart';
+import 'package:sippy_cart_sharing/routes/auto_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
 class AppRouter extends RootStackRouter {
@@ -7,7 +7,6 @@ class AppRouter extends RootStackRouter {
   RouteType get defaultRouteType => RouteType.material();
   @override
   List<AutoRoute> get routes => [
-    /// routes go here
-    AutoRoute(page: HomeRoute.page),
+    AutoRoute(page: HomeRoute.page, initial: true),
   ];
 }

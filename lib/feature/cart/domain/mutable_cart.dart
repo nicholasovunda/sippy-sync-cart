@@ -1,56 +1,43 @@
 import 'package:sippy_cart_sharing/feature/cart/domain/cart.dart';
-import 'package:sippy_cart_sharing/feature/cart/domain/cart_item_details.dart';
 import 'package:sippy_cart_sharing/feature/cart/domain/item.dart';
-import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
 
 extension MutableCart on Cart {
-  // add items to cart by updating quantity if it exist
-  Cart setItem(Item item, GuestId addedBy) {
-    final copy = Map<String, CartItemDetails>.from(items);
-    copy[item.productId] = CartItemDetails(
-      quantity: item.quantity,
-      addedBy: addedBy,
-    );
+  // Replace or insert an item in the cart
+  Cart setItem(Item item) {
+    final copy = Map<String, Item>.from(items);
+    copy[item.productId] = item;
     return Cart(copy);
   }
 
-  // Add item to existing cart by updating it
-  Cart addItem(Item item, GuestId addedBy) {
-    final copy = Map<String, CartItemDetails>.from(items);
+  // Add to existing quantity if the item exists, else insert it
+  Cart addItem(Item item) {
+    final copy = Map<String, Item>.from(items);
     copy.update(
       item.productId,
-      (details) => CartItemDetails(
-        quantity: details.quantity + item.quantity,
-        addedBy: addedBy,
-      ),
-      ifAbsent:
-          () => CartItemDetails(quantity: item.quantity, addedBy: addedBy),
+      (existing) =>
+          existing.copyWith(quantity: existing.quantity + item.quantity),
+      ifAbsent: () => item,
     );
     return Cart(copy);
   }
 
-  // add list of items to cart
-  Cart addItems(List<Item> itemsList, GuestId addedBy) {
-    final copy = Map<String, CartItemDetails>.from(items);
+  // Add a list of items to the cart
+  Cart addItems(List<Item> itemsList) {
+    final copy = Map<String, Item>.from(items);
     for (var item in itemsList) {
       copy.update(
         item.productId,
-
-        (details) => CartItemDetails(
-          quantity: details.quantity + item.quantity,
-          addedBy: addedBy,
-        ),
-
-        ifAbsent:
-            () => CartItemDetails(quantity: item.quantity, addedBy: addedBy),
+        (existing) =>
+            existing.copyWith(quantity: existing.quantity + item.quantity),
+        ifAbsent: () => item,
       );
     }
     return Cart(copy);
   }
 
-  // Remove item using ProductId
+  // Remove an item by its productId
   Cart removeItemById(String productId) {
-    final copy = Map<String, CartItemDetails>.from(items);
+    final copy = Map<String, Item>.from(items);
     copy.remove(productId);
     return Cart(copy);
   }

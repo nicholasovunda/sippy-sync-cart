@@ -15,10 +15,12 @@ abstract class LocalSessionRepository {
   Future<void> removeGuest({required GuestId guestId});
 
   // Add an item to the cart
-  Future<void> addItemToCart({required Item item, required GuestId addedBy});
+  Future<void> addItemToCart({required Item item});
 
   // Remove an item from the cart
   Future<void> removeItemFromCart({required String productId});
+
+  Future<void> setSession(Session session);
 
   // End the session
   Future<void> endSession();

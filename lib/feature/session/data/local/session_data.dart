@@ -1,5 +1,4 @@
 import 'package:sippy_cart_sharing/feature/cart/domain/cart.dart';
-import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
 
 class SessionDTO {
   final String sessionId;
