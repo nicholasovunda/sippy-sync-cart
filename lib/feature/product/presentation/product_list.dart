@@ -5,9 +5,9 @@ import 'package:sippy_cart_sharing/common_widgets/animated_loader.dart';
 import 'package:sippy_cart_sharing/feature/cart/application/cart_service.dart';
 import 'package:sippy_cart_sharing/feature/cart/domain/item.dart';
 import 'package:sippy_cart_sharing/feature/cart/presentation/item_counter.dart';
+import 'package:sippy_cart_sharing/feature/cart/presentation/shopping_cart_display.dart';
 import 'package:sippy_cart_sharing/feature/product/data/local/test_products.dart';
-import 'package:sippy_cart_sharing/feature/product/presentation/shopping_cart_display.dart';
-import 'package:sippy_cart_sharing/feature/session/data/local/local_repository.dart';
+
 import 'package:sippy_cart_sharing/feature/session/data/local/local_session_repository.dart';
 import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
 

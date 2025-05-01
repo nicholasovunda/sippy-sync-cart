@@ -8,7 +8,7 @@ class ShoppingCartIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cartItemsCount = context.watch<CartService>().getCartItemsCount();
+    final cartItemsCount = context.watch<CartService>().cartItemsCount;
     return Stack(
       children: [
         Center(
