@@ -7,6 +7,8 @@ import 'package:sippy_cart_sharing/feature/product/data/local/test_products.dart
 
 import 'package:sippy_cart_sharing/feature/session/data/local/local_session_repository.dart';
 import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
+import 'package:sippy_cart_sharing/routes/auto_router.gr.dart';
+import 'package:sippy_cart_sharing/utils/currency_formatter.dart';
 
 @RoutePage()
 class CartSummaryScreen extends StatelessWidget {
@@ -19,6 +21,8 @@ class CartSummaryScreen extends StatelessWidget {
       context,
       listen: false,
     );
+
+    final naira = currencyFormatter();
 
     return FutureBuilder(
       future: Future.wait([
@@ -55,7 +59,7 @@ class CartSummaryScreen extends StatelessWidget {
                     leading: Image.asset(product.imageUrl, width: 50),
                     title: Text(product.title),
                     subtitle: Text(
-                      '${item.quantity} × ${product.price.toStringAsFixed(0)} NGN\nAdded by: $addedByName',
+                      '${item.quantity} × ${naira.format(product.price)} NGN\nAdded by: $addedByName',
                       style: TextStyle(
                         color:
                             addedByName == session.creatorId
@@ -67,7 +71,7 @@ class CartSummaryScreen extends StatelessWidget {
                     ),
                     isThreeLine: true,
                     trailing: Text(
-                      '${(item.quantity * product.price).toStringAsFixed(0)} NGN',
+                      '${(naira.format(item.quantity * product.price))} NGN',
                     ),
                   ),
                 );
@@ -76,11 +80,41 @@ class CartSummaryScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  'Total: ${total.toStringAsFixed(0)} NGN',
+                  'Total: ${naira.format(total)} NGN',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
             ],
+          ),
+          bottomSheet: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Thanks for Shopping!')),
+                );
+
+                Future.delayed(const Duration(seconds: 1), () {
+                  context.router.replaceAll([const HomeRoute()]);
+                });
+              },
+
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.black,
+
+                padding: const EdgeInsets.symmetric(
+                  vertical: 18.0,
+                  horizontal: 100.0,
+                ),
+                textStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              child: const Text('Done'),
+            ),
           ),
         );
       },

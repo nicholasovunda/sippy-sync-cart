@@ -46,7 +46,7 @@ class _JoinModalState extends State<JoinModal> {
       Provider.of<ActiveUserProvider>(context, listen: false).name = name;
 
       if (mounted) {
-        Navigator.pop(context); // Close dialog
+        Navigator.pop(context);
         context.router.replaceAll([const ProductRoute()]);
       }
     } catch (e) {

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:sippy_cart_sharing/common_widgets/animated_loader.dart';
 import 'package:sippy_cart_sharing/feature/cart/application/cart_service.dart';
@@ -7,9 +8,10 @@ import 'package:sippy_cart_sharing/feature/cart/domain/item.dart';
 import 'package:sippy_cart_sharing/feature/cart/presentation/item_counter.dart';
 import 'package:sippy_cart_sharing/feature/cart/presentation/shopping_cart_display.dart';
 import 'package:sippy_cart_sharing/feature/product/data/local/test_products.dart';
-
 import 'package:sippy_cart_sharing/feature/session/data/local/local_session_repository.dart';
 import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
+import 'package:sippy_cart_sharing/routes/auto_router.gr.dart';
+import 'package:sippy_cart_sharing/utils/currency_formatter.dart';
 
 @RoutePage()
 class ProductScreen extends StatefulWidget {
@@ -51,32 +53,47 @@ class _ProductScreenState extends State<ProductScreen> {
         final guestIds = session.guestNames.keys.toList();
         _activeUserId ??= creatorId;
 
-        final bool isCreator = _activeUserId == creatorId;
+        // final bool isCreator = _activeUserId == creatorId;
+        final naira = currencyFormatter();
 
         return Scaffold(
           appBar: AppBar(
             title: const Text('Products'),
             actions: [
-              if (isCreator && guestIds.isNotEmpty)
-                DropdownButton<String>(
-                  value: _activeUserId,
-                  icon: const Icon(Icons.arrow_drop_down),
-                  onChanged: (value) {
+              DropdownButton<String>(
+                value: _activeUserId,
+                icon: const Icon(Icons.arrow_drop_down),
+                onChanged: (value) {
+                  if (value == 'add_new_user') {
+                    Navigator.pop(context);
+                    context.router.replaceAll([const HomeRoute()]);
+                  } else if (value != null) {
                     setState(() => _activeUserId = value);
-                  },
-                  items: [
-                    DropdownMenuItem(
-                      value: creatorId,
-                      child: const Text('Creator'),
+                  }
+                },
+                items: [
+                  DropdownMenuItem(
+                    value: creatorId,
+                    child: const Text('Creator'),
+                  ),
+                  ...guestIds.map(
+                    (id) => DropdownMenuItem(
+                      value: id,
+                      child: Text(session.guestNames[id] ?? 'Guest $id'),
                     ),
-                    ...guestIds.map(
-                      (id) => DropdownMenuItem(
-                        value: id,
-                        child: Text(session.guestNames[id] ?? 'Guest $id'),
-                      ),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'add_new_user',
+                    child: Row(
+                      children: const [
+                        Icon(Icons.add, size: 20),
+                        SizedBox(width: 8),
+                        Text('Add New User'),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
               const Padding(
                 padding: EdgeInsets.only(right: 12),
                 child: ShoppingCartIcon(),
@@ -111,13 +128,13 @@ class _ProductScreenState extends State<ProductScreen> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      Gap(8),
                       Text(
                         product.title,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text('${product.price.toStringAsFixed(0)} NGN'),
-                      const SizedBox(height: 6),
+                      Text('${naira.format(product.price)} NGN'),
+                      Gap(6),
                       ItemQuantitySelector(
                         quantity: quantity,
                         maxQuantity: product.availableQuantity,
@@ -127,7 +144,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           });
                         },
                       ),
-                      const SizedBox(height: 8),
+                      Gap(8),
                       ElevatedButton(
                         onPressed: () async {
                           final item = Item(
