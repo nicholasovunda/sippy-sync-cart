@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:sippy_cart_sharing/feature/cart/application/cart_service.dart';
+import 'package:sippy_cart_sharing/routes/auto_router.gr.dart';
 
 class ShoppingCartIcon extends StatelessWidget {
   const ShoppingCartIcon({super.key});
@@ -15,7 +17,7 @@ class ShoppingCartIcon extends StatelessWidget {
           child: IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
-              // TODO: Navigate to cart page
+              context.router.push(const CartSummaryRoute());
             },
           ),
         ),

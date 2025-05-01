@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:sippy_cart_sharing/common_widgets/animated_loader.dart';
 import 'package:sippy_cart_sharing/feature/cart/application/cart_service.dart';
 import 'package:sippy_cart_sharing/feature/product/data/local/test_products.dart';
-import 'package:sippy_cart_sharing/feature/session/data/local/local_repository.dart';
+
+import 'package:sippy_cart_sharing/feature/session/data/local/local_session_repository.dart';
 import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
 
 @RoutePage()
@@ -14,7 +15,7 @@ class CartSummaryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartService = Provider.of<CartService>(context, listen: false);
-    final sessionRepo = Provider.of<LocalSessionRepository>(
+    final sessionRepo = Provider.of<LocalSessionRepositoryImpl>(
       context,
       listen: false,
     );
