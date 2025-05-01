@@ -182,16 +182,6 @@ class SessionCard extends StatelessWidget {
       child: ListTile(
         title: Text(session.creatorId),
         subtitle: Text("Guest(s): $guests"),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () {
-          // Load this session and navigate to products page
-          final sessionRepo = Provider.of<LocalSessionRepository>(
-            context,
-            listen: false,
-          );
-
-          context.router.push(const ProductRoute());
-        },
       ),
     );
   }
