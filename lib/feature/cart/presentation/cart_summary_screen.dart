@@ -46,7 +46,7 @@ class CartSummaryScreen extends StatelessWidget {
                 final item = entry.value;
                 final addedByName =
                     item.addedBy == session.creatorId
-                        ? 'Creator'
+                        ? session.creatorId
                         : session.guestNames[item.addedBy] ?? 'Unknown';
 
                 return Card(
@@ -56,6 +56,14 @@ class CartSummaryScreen extends StatelessWidget {
                     title: Text(product.title),
                     subtitle: Text(
                       '${item.quantity} × ${product.price.toStringAsFixed(0)} NGN\nAdded by: $addedByName',
+                      style: TextStyle(
+                        color:
+                            addedByName == session.creatorId
+                                ? Colors.purple
+                                : Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     isThreeLine: true,
                     trailing: Text(
