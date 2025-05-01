@@ -1,30 +1,42 @@
 import 'package:flutter/material.dart';
 
-// class ShoppingCartIcon extends StatelessWidget {
-//   const ShoppingCartIcon({super.key});
+import 'package:provider/provider.dart';
+import 'package:sippy_cart_sharing/feature/cart/application/cart_service.dart';
 
-//   @override
-//   Widget build(BuildContext context) {
-//     // final cartItemsCount = ref.watch(cartItemsCountProvider);
-//     // TODO: Add provider to get the info and consumer to update the data as it changes
-//     return Stack(
-//       children: [
-//         Center(
-//           child: IconButton(
-//             icon: const Icon(Icons.shopping_cart),
-//             onPressed: () {},
-//           ),
-//         ),
-//         if (cartItemsCount > 0)
-//           Positioned(
-//             top: 4,
-//             right: 4,
-//             child: ShoppingCartIconBadge(itemsCount: cartItemsCount),
-//           ),
-//       ],
-//     );
-//   }
-// }
+class ShoppingCartIcon extends StatelessWidget {
+  const ShoppingCartIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final cartService = context.read<CartService>();
+
+    return FutureBuilder<int>(
+      future: cartService.getCartItemsCount(),
+      builder: (context, snapshot) {
+        final cartItemsCount = snapshot.data ?? 0;
+
+        return Stack(
+          children: [
+            Center(
+              child: IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  // TODO: Navigate to cart page
+                },
+              ),
+            ),
+            if (cartItemsCount > 0)
+              Positioned(
+                top: 4,
+                right: 4,
+                child: ShoppingCartIconBadge(itemsCount: cartItemsCount),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
 
 /// Icon badge showing the items count
 class ShoppingCartIconBadge extends StatelessWidget {

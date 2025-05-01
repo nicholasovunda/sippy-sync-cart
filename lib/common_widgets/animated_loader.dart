@@ -13,7 +13,7 @@ class CustomLoadingIndicator extends StatelessWidget {
     this.size = 100.0,
     this.repeat = true,
     this.animate = true,
-    this.animationPath = 'assets/animations/loading_animation.json',
+    this.animationPath = '/animations/loading_animation.json',
   });
   @override
   Widget build(BuildContext context) {
