@@ -15,7 +15,6 @@ import 'package:sippy_cart_sharing/routes/auto_router.dart';
 import 'package:sippy_cart_sharing/routes/auto_router.gr.dart';
 
 void main() {
-  // Suppress provider type safety warnings for plain Dart providers like LocalSessionRepository
   Provider.debugCheckInvalidValueType = null;
   runApp(MyApp());
 }
@@ -30,14 +29,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ActiveUserProvider()),
-
-        Provider<LocalSessionRepository>(
+        Provider<LocalSessionRepositoryImpl>(
           create: (_) => LocalSessionRepositoryImpl(),
         ),
-        ChangeNotifierProxyProvider<LocalSessionRepository, CartService>(
+        ChangeNotifierProxyProvider<LocalSessionRepositoryImpl, CartService>(
           create:
               (context) => CartService(
-                localSessionRepository: Provider.of<LocalSessionRepository>(
+                localSessionRepository: Provider.of<LocalSessionRepositoryImpl>(
                   context,
                   listen: false,
                 ),
@@ -48,6 +46,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         title: 'Sippy sync cart',
         theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme(),
@@ -75,31 +74,34 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showInviteModal() {
     showDialog(
       context: context,
-      builder: (dialogContext) {
-        return Consumer<LocalSessionRepository>(
-          builder: (context, localSessionRepository, child) {
-            return InviteModal(localSessionRepository: localSessionRepository);
-          },
-        );
-      },
+      builder:
+          (dialogContext) => Provider.value(
+            value: Provider.of<LocalSessionRepositoryImpl>(
+              context,
+              listen: false,
+            ),
+            child: const InviteModal(),
+          ),
     );
   }
 
   void _showJoinModal() {
     showDialog(
       context: context,
-      builder: (dialogContext) {
-        return Consumer<LocalSessionRepository>(
-          builder: (context, localSessionRepository, child) {
-            return JoinModal(localSessionRepository: localSessionRepository);
-          },
-        );
-      },
+      builder:
+          (dialogContext) => Provider.value(
+            value: Provider.of<LocalSessionRepositoryImpl>(
+              context,
+              listen: false,
+            ),
+            child: const JoinModal(),
+          ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<LocalSessionRepositoryImpl>(context, listen: false);
     return Scaffold(
       appBar: AppBar(title: const Text('Sippy cart sync'), elevation: 2),
       body: Stack(

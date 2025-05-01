@@ -1,12 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sippy_cart_sharing/common_widgets/animated_loader.dart';
 import 'package:sippy_cart_sharing/feature/cart/application/cart_service.dart';
 import 'package:sippy_cart_sharing/feature/cart/domain/item.dart';
 import 'package:sippy_cart_sharing/feature/cart/presentation/item_counter.dart';
 import 'package:sippy_cart_sharing/feature/product/data/local/test_products.dart';
 import 'package:sippy_cart_sharing/feature/product/presentation/shopping_cart_display.dart';
 import 'package:sippy_cart_sharing/feature/session/data/local/local_repository.dart';
+import 'package:sippy_cart_sharing/feature/session/data/local/local_session_repository.dart';
 import 'package:sippy_cart_sharing/feature/session/domain/session.dart';
 
 @RoutePage()
@@ -26,7 +28,7 @@ class _ProductScreenState extends State<ProductScreen> {
   void initState() {
     super.initState();
     _sessionFuture =
-        Provider.of<LocalSessionRepository>(
+        Provider.of<LocalSessionRepositoryImpl>(
           context,
           listen: false,
         ).fetchSession();
@@ -35,12 +37,13 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     final cartService = Provider.of<CartService>(context, listen: false);
+    Provider.of<LocalSessionRepositoryImpl>(context, listen: false);
 
     return FutureBuilder<Session>(
       future: _sessionFuture,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomLoadingIndicator());
         }
 
         final session = snapshot.data!;

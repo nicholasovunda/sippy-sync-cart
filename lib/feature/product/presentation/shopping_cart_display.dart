@@ -8,32 +8,24 @@ class ShoppingCartIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cartService = context.read<CartService>();
-
-    return FutureBuilder<int>(
-      future: cartService.getCartItemsCount(),
-      builder: (context, snapshot) {
-        final cartItemsCount = snapshot.data ?? 0;
-
-        return Stack(
-          children: [
-            Center(
-              child: IconButton(
-                icon: const Icon(Icons.shopping_cart),
-                onPressed: () {
-                  // TODO: Navigate to cart page
-                },
-              ),
-            ),
-            if (cartItemsCount > 0)
-              Positioned(
-                top: 4,
-                right: 4,
-                child: ShoppingCartIconBadge(itemsCount: cartItemsCount),
-              ),
-          ],
-        );
-      },
+    final cartItemsCount = context.watch<CartService>().getCartItemsCount();
+    return Stack(
+      children: [
+        Center(
+          child: IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              // TODO: Navigate to cart page
+            },
+          ),
+        ),
+        if (cartItemsCount > 0)
+          Positioned(
+            top: 4,
+            right: 4,
+            child: ShoppingCartIconBadge(itemsCount: cartItemsCount),
+          ),
+      ],
     );
   }
 }
